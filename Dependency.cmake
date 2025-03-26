@@ -10,7 +10,7 @@ set(DEP_LIB_DIR ${DEP_INSTALL_DIR}/lib)
 
 # spdlog: fast logger library
 ExternalProject_Add(
-    dep-spdlog
+    dep_spdlog
     GIT_REPOSITORY "https://github.com/gabime/spdlog.git"
     GIT_TAG "v1.x"
     GIT_SHALLOW 1 # 가장 최신 버전 다운 플래그
@@ -21,5 +21,25 @@ ExternalProject_Add(
 )
 
 # Dependency 리스트 및 라이브러리 파일 리스트 추가
-set(DEP_LIST ${DEP_LIST} dep-spdlog) # 라이브러리 리스트
+set(DEP_LIST ${DEP_LIST} dep_spdlog) # 라이브러리 리스트
 set(DEP_LIBS ${DEP_LIBS} spdlog$<$<CONFIG:Debug>:d>) # 실제로 사용할 라이브러리
+
+# glfw
+# OpenGL API 사용 가능
+# 윈도우를 생성할 수 있게 해주고, 윈도우에 OpenGL을 위한 surface를 생성하고 연결해줌
+# 키보드와 마우스 입력을 연결해줌
+ExternalProject_Add(
+    dep_glfw
+    GIT_REPOSITORY "https://github.com/glfw/glfw.git"
+    GIT_TAG "3.3.10"
+    GIT_SHALLOW 1
+    UPDATE_COMMAND "" PATCH_COMMAND "" TEST_COMMAND ""
+    CMAKE_ARGS
+        -DCMAKE_INSTALL_PREFIX=${DEP_INSTALL_DIR}
+        -DGLFW_BUILD_EXAMPLES=OFF
+        -DGLFW_BUILD_TESTS=OFF
+        -DGLFW_BUILD_DOCS=OFF
+    )
+    
+set(DEP_LIST ${DEP_LIST} dep_glfw)
+set(DEP_LIBS ${DEP_LIBS} glfw3)
