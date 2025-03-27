@@ -1,4 +1,5 @@
 #include "common.h"
+#include "shader.h"
 #include <spdlog/spdlog.h>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -76,6 +77,11 @@ int main(int argc, const char** argv)
     SPDLOG_INFO("OpenGL context version: {}", reinterpret_cast<const char*>(glVersion));
     // 이후 OpenGL 함수들을 사용할 수 있음
     // OpenGL 함수들은 상태를 설정하는 함수 / 상태를 사용하는 함수로 나눌 수 있다.
+
+auto vertexShader = Shader::CreateFromFile("./shader/simple.vs", GL_VERTEX_SHADER);
+auto fragmentShader = Shader::CreateFromFile("./shader/simple.fs", GL_FRAGMENT_SHADER);
+SPDLOG_INFO("vertex shader id: {}", vertexShader->Get());
+SPDLOG_INFO("fragment shader id: {}", fragmentShader->Get());
 
     OnFramebufferSizeChange(Window, WINDOW_WIDTH, WINDOW_HEIGHT);
     glfwSetWindowSizeCallback(Window, OnFramebufferSizeChange);

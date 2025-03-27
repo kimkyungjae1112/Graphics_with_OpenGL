@@ -1,0 +1,6 @@
+{
+    // 현재 실행되는 work folder를 현재 루프 디렉토리로 만들겠다.
+    "cmake.debugConfig": {
+        "cwd" : "${workspaceFolder}"
+    }
+}

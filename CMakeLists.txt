@@ -10,7 +10,11 @@ set(WINDOW_HEIGHT 540)
 
 project(${PROJECT_NAME})
 add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
-add_executable(${PROJECT_NAME} src/main.cpp)
+add_executable(${PROJECT_NAME} 
+    src/main.cpp
+    src/common.cpp src/common.h
+    src/shader.cpp src/shader.h
+    )
 
 include(Dependency.cmake)
 
