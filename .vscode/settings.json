@@ -4,6 +4,7 @@
         "cwd" : "${workspaceFolder}"
     },
     "files.associations": {
-        "xiosbase": "cpp"
+        "xiosbase": "cpp",
+        "memory": "cpp"
     }
 }

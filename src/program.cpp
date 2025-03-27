@@ -15,6 +15,11 @@ Program::~Program()
     }
 }
 
+void Program::Use() const
+{
+    glUseProgram(m_program);
+}
+
 bool Program::Link(const std::vector<ShaderPtr>& shaders) 
 {
     // gl function 을 이용해서 program id 를 얻는다.
