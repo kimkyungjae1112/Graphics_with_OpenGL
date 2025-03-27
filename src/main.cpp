@@ -1,5 +1,4 @@
-#include "common.h"
-#include "shader.h"
+#include "context.h"
 #include <spdlog/spdlog.h>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -24,12 +23,6 @@ void OnKeyEvent(GLFWwindow* Window, int Key, int Scancode, int Action, int Mods)
     {
         glfwSetWindowShouldClose(Window, true);
     }
-}
-
-void Render() 
-{
-    glClearColor(0.1f, 0.2f, 0.3f, 0.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
 }
 
 int main(int argc, const char** argv) 
@@ -78,24 +71,29 @@ int main(int argc, const char** argv)
     // 이후 OpenGL 함수들을 사용할 수 있음
     // OpenGL 함수들은 상태를 설정하는 함수 / 상태를 사용하는 함수로 나눌 수 있다.
 
-auto vertexShader = Shader::CreateFromFile("./shader/simple.vs", GL_VERTEX_SHADER);
-auto fragmentShader = Shader::CreateFromFile("./shader/simple.fs", GL_FRAGMENT_SHADER);
-SPDLOG_INFO("vertex shader id: {}", vertexShader->Get());
-SPDLOG_INFO("fragment shader id: {}", fragmentShader->Get());
+    ContextUPtr context = Context::Create();
+    if (!context) 
+    {
+      SPDLOG_ERROR("failed to create context");
+      glfwTerminate();
+      return -1;
+    }
 
     OnFramebufferSizeChange(Window, WINDOW_WIDTH, WINDOW_HEIGHT);
     glfwSetWindowSizeCallback(Window, OnFramebufferSizeChange);
     glfwSetKeyCallback(Window, OnKeyEvent);
-
 
     // glfw 루프 실행, 윈도우 close 버튼을 누르면 정상 종료
     SPDLOG_INFO("Start main loop");
     while (!glfwWindowShouldClose(Window)) 
     {
         glfwPollEvents();
-        Render();
+        context->Render();
         glfwSwapBuffers(Window);    
     }
+
+    // 우리가 만든 쉐이더, 프로그램 메모리를 미리 정리하는 것이 좋다.
+    context.reset();
 
     glfwTerminate();
     return 0;
