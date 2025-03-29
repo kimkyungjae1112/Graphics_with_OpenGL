@@ -17,6 +17,7 @@ Program::~Program()
 
 void Program::Use() const
 {
+    // 해당 프로그램을 가지고 그림을 그리겠다.
     glUseProgram(m_program);
 }
 
@@ -29,6 +30,7 @@ bool Program::Link(const std::vector<ShaderPtr>& shaders)
     for (auto& shader: shaders) glAttachShader(m_program, shader->Get());
 
     // vertex shader, fragment shader를 링크 -> 파이프라인을 만드는 것 같음.
+    // 링크할 때 Qualifier(In / Out) 값이 같은지 확인한다.
     glLinkProgram(m_program);
 
     int success = 0;
