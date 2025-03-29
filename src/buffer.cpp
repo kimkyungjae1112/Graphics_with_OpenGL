@@ -17,6 +17,8 @@ Buffer::~Buffer()
 
 void Buffer::Bind() const 
 {
+    // GL_ARRAY_BUFFER로 바인딩 할 버퍼 핸들을 설정
+    // GL_ARRAY_BUFFER를 m_buffer로 설정해주는겨
     glBindBuffer(m_bufferType, m_buffer);
 }
 
