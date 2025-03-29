@@ -59,19 +59,20 @@ bool Context::Init()
     if (!image) return false;
     SPDLOG_INFO("image: {}x{}, {} channels", image->GetWidth(), image->GetHeight(), image->GetChannelCount());
 
-    glGenTextures(1, &m_texture);
-    glBindTexture(GL_TEXTURE_2D, m_texture);
+    auto image2 = Image::Load("./image/awesomeface.png");
 
-    // 필터링과 랩핑 설정
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    // S,T => 텍스처 좌표계에서 x, y축
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    m_texture = Texture::CreateFromImage(image.get());
+	m_texture2 = Texture::CreateFromImage(image2.get());
+   
+    glActiveTexture(GL_TEXTURE0); // 0번 슬롯과 
+    glBindTexture(GL_TEXTURE_2D, m_texture->Get());
+    glActiveTexture(GL_TEXTURE1); // 1번 슬롯을 쓸거다 전달!
+    glBindTexture(GL_TEXTURE_2D, m_texture2->Get());
 
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,image->GetWidth(), image->GetHeight(), 0,
-                GL_RGB, GL_UNSIGNED_BYTE, image->GetData());
-
+    m_program->Use();
+    glUniform1i(glGetUniformLocation(m_program->Get(), "tex"), 0);
+    glUniform1i(glGetUniformLocation(m_program->Get(), "tex2"), 1);
+    
     return true;
 }
 
