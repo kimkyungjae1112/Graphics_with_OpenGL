@@ -6,7 +6,8 @@
 void OnFramebufferSizeChange(GLFWwindow* Window, int Width, int Height) 
 {
     SPDLOG_INFO("framebuffer size changed: ({} x {})", Width, Height);
-    glViewport(0, 0, Width, Height);
+    auto context = reinterpret_cast<Context*>(glfwGetWindowUserPointer(Window));
+    context->Reshape(Width, Height);
 }
 
 void OnKeyEvent(GLFWwindow* Window, int Key, int Scancode, int Action, int Mods) 
@@ -23,6 +24,20 @@ void OnKeyEvent(GLFWwindow* Window, int Key, int Scancode, int Action, int Mods)
     {
         glfwSetWindowShouldClose(Window, true);
     }
+}
+
+void OnCursorPos(GLFWwindow* window, double x, double y) 
+{
+    auto context = reinterpret_cast<Context*>(glfwGetWindowUserPointer(window));
+    context->MouseMove(x, y);
+}
+
+void OnMouseButton(GLFWwindow* window, int button, int action, int modifier) 
+{
+    auto context = (Context*)glfwGetWindowUserPointer(window);
+    double x, y;
+    glfwGetCursorPos(window, &x, &y);
+    context->MouseButton(button, action, x, y);
 }
 
 int main(int argc, const char** argv) 
@@ -79,15 +94,20 @@ int main(int argc, const char** argv)
       return -1;
     }
 
+    glfwSetWindowUserPointer(Window, context.get());
+
     OnFramebufferSizeChange(Window, WINDOW_WIDTH, WINDOW_HEIGHT);
     glfwSetWindowSizeCallback(Window, OnFramebufferSizeChange);
     glfwSetKeyCallback(Window, OnKeyEvent);
+    glfwSetCursorPosCallback(Window, OnCursorPos);
+    glfwSetMouseButtonCallback(Window, OnMouseButton);
 
     // glfw 루프 실행, 윈도우 close 버튼을 누르면 정상 종료
     SPDLOG_INFO("Start main loop");
     while (!glfwWindowShouldClose(Window)) 
     {
         glfwPollEvents();
+        context->ProcessInput(Window);
         context->Render();
         glfwSwapBuffers(Window);    
     }
