@@ -1,5 +1,6 @@
 #include "context.h"
 #include "image.h"
+#include <imgui.h>
 
 ContextUPtr Context::Create() 
 {
@@ -174,6 +175,27 @@ bool Context::Init()
 
 void Context::Render() 
 {
+    // Begin과 End 한 쌍이 하나의 Window
+    if (ImGui::Begin("ui window")) 
+    {
+      if (ImGui::ColorEdit4("clear color", glm::value_ptr(m_clearColor))) 
+      {
+          glClearColor(m_clearColor.r, m_clearColor.g, m_clearColor.b, m_clearColor.a);
+      }
+      ImGui::Separator();
+      ImGui::DragFloat3("camera pos", glm::value_ptr(m_cameraPos), 0.01f);
+      ImGui::DragFloat("camera yaw", &m_cameraYaw, 0.5f);
+      ImGui::DragFloat("camera pitch", &m_cameraPitch, 0.5f, -89.0f, 89.0f);
+      ImGui::Separator();
+      if (ImGui::Button("reset camera")) 
+      {
+          m_cameraYaw = 0.0f;
+          m_cameraPitch = 0.0f;
+          m_cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
+      }
+    }
+    ImGui::End();
+
     std::vector<glm::vec3> cubePositions = {
         glm::vec3( 0.0f, 0.0f, 0.0f),
         glm::vec3( 2.0f, 5.0f, -15.0f),
@@ -190,25 +212,25 @@ void Context::Render()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glEnable(GL_DEPTH_TEST);
 
-	m_cameraFront =
-        glm::rotate(glm::mat4(1.0f), glm::radians(m_cameraYaw), glm::vec3(0.0f, 1.0f, 0.0f)) *
-        glm::rotate(glm::mat4(1.0f), glm::radians(m_cameraPitch), glm::vec3(1.0f, 0.0f, 0.0f)) *
-        glm::vec4(0.0f, 0.0f, -1.0f, 0.0f);
+    m_cameraFront =
+          glm::rotate(glm::mat4(1.0f), glm::radians(m_cameraYaw), glm::vec3(0.0f, 1.0f, 0.0f)) *
+          glm::rotate(glm::mat4(1.0f), glm::radians(m_cameraPitch), glm::vec3(1.0f, 0.0f, 0.0f)) *
+          glm::vec4(0.0f, 0.0f, -1.0f, 0.0f);
 
-    auto projection = glm::perspective(glm::radians(45.0f), (float)m_width / (float)m_height, 0.01f, 20.0f);
-    auto view = glm::lookAt(
-        m_cameraPos,
-        m_cameraPos + m_cameraFront,
-        m_cameraUp);
+      auto projection = glm::perspective(glm::radians(45.0f), (float)m_width / (float)m_height, 0.01f, 20.0f);
+      auto view = glm::lookAt(
+          m_cameraPos,
+          m_cameraPos + m_cameraFront,
+          m_cameraUp);
 
-    for (size_t i = 0; i < cubePositions.size(); i++){
-        auto& pos = cubePositions[i];
-        auto model = glm::translate(glm::mat4(1.0f), pos);
-        model = glm::rotate(model,
-            glm::radians((float)glfwGetTime() * 120.0f + 20.0f * (float)i),
-            glm::vec3(1.0f, 0.5f, 0.0f));
-        auto transform = projection * view * model;
-        m_program->SetUniform("transform", transform);
-        glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
-    }
+      for (size_t i = 0; i < cubePositions.size(); i++){
+          auto& pos = cubePositions[i];
+          auto model = glm::translate(glm::mat4(1.0f), pos);
+          model = glm::rotate(model,
+              glm::radians((float)glfwGetTime() * 120.0f + 20.0f * (float)i),
+              glm::vec3(1.0f, 0.5f, 0.0f));
+          auto transform = projection * view * model;
+          m_program->SetUniform("transform", transform);
+          glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+      }
 }

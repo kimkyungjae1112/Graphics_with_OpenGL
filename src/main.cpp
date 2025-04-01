@@ -14,6 +14,8 @@ void OnFramebufferSizeChange(GLFWwindow* Window, int Width, int Height)
 
 void OnKeyEvent(GLFWwindow* Window, int Key, int Scancode, int Action, int Mods) 
 {
+    ImGui_ImplGlfw_KeyCallback(Window, Key, Scancode, Action, Mods);
+
     SPDLOG_INFO("Key: {}, Scancode: {}, Action: {}, Mods: {}{}{}",
         Key, Scancode,
         Action == GLFW_PRESS ? "Pressed" :
@@ -36,10 +38,22 @@ void OnCursorPos(GLFWwindow* window, double x, double y)
 
 void OnMouseButton(GLFWwindow* window, int button, int action, int modifier) 
 {
+    ImGui_ImplGlfw_MouseButtonCallback(window, button, action, modifier);
+
     auto context = (Context*)glfwGetWindowUserPointer(window);
     double x, y;
     glfwGetCursorPos(window, &x, &y);
     context->MouseButton(button, action, x, y);
+}
+
+void OnCharEvent(GLFWwindow* window, unsigned int ch) 
+{
+    ImGui_ImplGlfw_CharCallback(window, ch);
+}
+
+void OnScroll(GLFWwindow* window, double xoffset, double yoffset) 
+{
+    ImGui_ImplGlfw_ScrollCallback(window, xoffset, yoffset);
 }
 
 int main(int argc, const char** argv) 
@@ -88,6 +102,13 @@ int main(int argc, const char** argv)
     // 이후 OpenGL 함수들을 사용할 수 있음
     // OpenGL 함수들은 상태를 설정하는 함수 / 상태를 사용하는 함수로 나눌 수 있다.
 
+    auto imguiContext = ImGui::CreateContext();
+    ImGui::SetCurrentContext(imguiContext);
+    ImGui_ImplGlfw_InitForOpenGL(Window, false);
+    ImGui_ImplOpenGL3_Init();
+    ImGui_ImplOpenGL3_CreateFontsTexture();
+    ImGui_ImplOpenGL3_CreateDeviceObjects();
+
     ContextUPtr context = Context::Create();
     if (!context) 
     {
@@ -101,21 +122,35 @@ int main(int argc, const char** argv)
     OnFramebufferSizeChange(Window, WINDOW_WIDTH, WINDOW_HEIGHT);
     glfwSetWindowSizeCallback(Window, OnFramebufferSizeChange);
     glfwSetKeyCallback(Window, OnKeyEvent);
+    glfwSetCharCallback(Window, OnCharEvent);
     glfwSetCursorPosCallback(Window, OnCursorPos);
     glfwSetMouseButtonCallback(Window, OnMouseButton);
+    glfwSetScrollCallback(Window, OnScroll);
 
     // glfw 루프 실행, 윈도우 close 버튼을 누르면 정상 종료
     SPDLOG_INFO("Start main loop");
     while (!glfwWindowShouldClose(Window)) 
     {
         glfwPollEvents();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+
         context->ProcessInput(Window);
         context->Render();
+
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
         glfwSwapBuffers(Window);    
     }
 
     // 우리가 만든 쉐이더, 프로그램 메모리를 미리 정리하는 것이 좋다.
     context.reset();
+
+    ImGui_ImplOpenGL3_DestroyFontsTexture();
+    ImGui_ImplOpenGL3_DestroyDeviceObjects();
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext(imguiContext);
 
     glfwTerminate();
     return 0;
