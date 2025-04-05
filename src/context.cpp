@@ -79,39 +79,39 @@ void Context::MouseButton(int button, int action, double x, double y)
 
 bool Context::Init() 
 {
-    float vertices[] = {
-        -0.5f, -0.5f, -0.5f, 0.0f, 0.0f,
-         0.5f, -0.5f, -0.5f, 1.0f, 0.0f,
-         0.5f,  0.5f, -0.5f, 1.0f, 1.0f,
-        -0.5f,  0.5f, -0.5f, 0.0f, 1.0f,
-      
-        -0.5f, -0.5f,  0.5f, 0.0f, 0.0f,
-         0.5f, -0.5f,  0.5f, 1.0f, 0.0f,
-         0.5f,  0.5f,  0.5f, 1.0f, 1.0f,
-        -0.5f,  0.5f,  0.5f, 0.0f, 1.0f,
-      
-        -0.5f,  0.5f,  0.5f, 1.0f, 0.0f,
-        -0.5f,  0.5f, -0.5f, 1.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
-        -0.5f, -0.5f,  0.5f, 0.0f, 0.0f,
-      
-         0.5f,  0.5f,  0.5f, 1.0f, 0.0f,
-         0.5f,  0.5f, -0.5f, 1.0f, 1.0f,
-         0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
-         0.5f, -0.5f,  0.5f, 0.0f, 0.0f,
-      
-        -0.5f, -0.5f, -0.5f, 0.0f, 1.0f,
-         0.5f, -0.5f, -0.5f, 1.0f, 1.0f,
-         0.5f, -0.5f,  0.5f, 1.0f, 0.0f,
-        -0.5f, -0.5f,  0.5f, 0.0f, 0.0f,
-      
-        -0.5f,  0.5f, -0.5f, 0.0f, 1.0f,
-         0.5f,  0.5f, -0.5f, 1.0f, 1.0f,
-         0.5f,  0.5f,  0.5f, 1.0f, 0.0f,
-        -0.5f,  0.5f,  0.5f, 0.0f, 0.0f,
+    float vertices[] = { // pos.xyz, normal.xyz, texcoord.uv
+      -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 0.0f, 0.0f,
+       0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 1.0f, 0.0f,
+       0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 1.0f, 1.0f,
+      -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 0.0f, 1.0f,
+    
+      -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f, 0.0f, 0.0f,
+       0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f, 1.0f, 0.0f,
+       0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f, 1.0f, 1.0f,
+      -0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f, 0.0f, 1.0f,
+    
+      -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f, 1.0f, 0.0f,
+      -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f, 1.0f, 1.0f,
+      -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f, 0.0f, 1.0f,
+      -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f, 0.0f, 0.0f,
+    
+      0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f, 1.0f, 0.0f,
+      0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f, 1.0f, 1.0f,
+      0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f, 0.0f, 1.0f,
+      0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f, 0.0f, 0.0f,
+    
+      -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f, 0.0f, 1.0f,
+       0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f, 1.0f, 1.0f,
+       0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f, 1.0f, 0.0f,
+      -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f, 0.0f, 0.0f,
+    
+      -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f, 0.0f, 1.0f,
+       0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f, 1.0f, 1.0f,
+       0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f, 1.0f, 0.0f,
+      -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f, 0.0f, 0.0f,
     };
       
-      uint32_t indices[] = {
+    uint32_t indices[] = {
          0,  2,  1,  2,  0,  3,
          4,  5,  6,  6,  7,  4,
          8,  9, 10, 10, 11,  8,
@@ -123,19 +123,11 @@ bool Context::Init()
     // VBO를 만들기 전에 만들어야 한다.
     m_vertexLayout = VertexLayout::Create();
 
-    // 1. vertex Buffer 생성
-    // 2. 각 vertex 에 위치값, 색상값들이 들어가는 용도의 buffer
-    // 3. vertext buffer 에 데이터 복사 -> m_vertextBuffer
-    m_vertexBuffer = Buffer::CreateWithData(GL_ARRAY_BUFFER, GL_STATIC_DRAW, vertices, sizeof(float) * 120);
-
-    // 0번 attribute를 사용한다.
-    // 0번 attribute는 어떻게 생겼냐? 
-    // vertex shader에 있는 변수를 attribute 라고 하는듯
-    // attribute가 몇 개의 값으로 구성되어 있는지와 type, 정규화된 값, stride (attribute 간 간격)
-    // 첫 정점의 해당 attribute까지의 간격 (byte 단위)
-    //m_vertexLayout->SetAttrib(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, 0);
-    m_vertexLayout->SetAttrib(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 5, 0);
-    m_vertexLayout->SetAttrib(2, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 5, sizeof(float) * 3);
+    m_vertexBuffer = Buffer::CreateWithData(GL_ARRAY_BUFFER, GL_STATIC_DRAW, vertices, sizeof(float) * 8 * 6 * 4);
+  
+    m_vertexLayout->SetAttrib(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 8, 0);
+    m_vertexLayout->SetAttrib(1, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 8, sizeof(float) * 3);
+    m_vertexLayout->SetAttrib(2, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 8, sizeof(float) * 6);
 
     m_indexBuffer = Buffer::CreateWithData(GL_ELEMENT_ARRAY_BUFFER, GL_STATIC_DRAW, indices, sizeof(uint32_t) * 36);
 
@@ -191,20 +183,16 @@ void Context::Render()
             m_cameraPitch = 0.0f;
             m_cameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
         }
-        if (ImGui::CollapsingHeader("light")) 
+        if (ImGui::CollapsingHeader("light", ImGuiTreeNodeFlags_DefaultOpen)) 
         {
+            ImGui::DragFloat3("light pos", glm::value_ptr(m_lightPos), 0.01f);
             ImGui::ColorEdit3("light color", glm::value_ptr(m_lightColor));
             ImGui::ColorEdit3("object color", glm::value_ptr(m_objectColor));
             ImGui::SliderFloat("ambient strength", &m_ambientStrength, 0.0f, 1.0f);
         }
+        ImGui::Checkbox("animation", &m_animation);
     }
     ImGui::End();
-
-    m_program->Use();
-    m_program->SetUniform("lightColor", m_lightColor);
-    m_program->SetUniform("objectColor", m_objectColor);
-    m_program->SetUniform("ambientStrength", m_ambientStrength);
-
 
     std::vector<glm::vec3> cubePositions = {
         glm::vec3( 0.0f, 0.0f, 0.0f),
@@ -233,15 +221,34 @@ void Context::Render()
         m_cameraPos + m_cameraFront,
         m_cameraUp);
 
+    auto lightModelTransform =
+        glm::translate(glm::mat4(1.0), m_lightPos) *
+        glm::scale(glm::mat4(1.0), glm::vec3(0.1f));
+    m_program->Use();
+    m_program->SetUniform("lightPos", m_lightPos);
+    m_program->SetUniform("lightColor", glm::vec3(1.0f, 1.0f, 1.0f));
+    m_program->SetUniform("objectColor", glm::vec3(1.0f, 1.0f, 1.0f));
+    m_program->SetUniform("ambientStrength", 1.0f);
+    m_program->SetUniform("transform", projection * view * lightModelTransform);
+    m_program->SetUniform("modelTransform", lightModelTransform);
+    glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+
+    m_program->Use();
+    m_program->SetUniform("lightPos", m_lightPos);
+    m_program->SetUniform("lightColor", m_lightColor);
+    m_program->SetUniform("objectColor", m_objectColor);
+    m_program->SetUniform("ambientStrength", m_ambientStrength);
+    
     for (size_t i = 0; i < cubePositions.size(); i++)
     {
         auto& pos = cubePositions[i];
         auto model = glm::translate(glm::mat4(1.0f), pos);
         model = glm::rotate(model,
-            glm::radians((float)glfwGetTime() * 120.0f + 20.0f * (float)i),
+            glm::radians((m_animation ? (float)glfwGetTime() : 0.0f) * 120.0f + 20.0f * (float)i),
             glm::vec3(1.0f, 0.5f, 0.0f));
         auto transform = projection * view * model;
         m_program->SetUniform("transform", transform);
+        m_program->SetUniform("modelTransform", model);
         glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
     }
 }
